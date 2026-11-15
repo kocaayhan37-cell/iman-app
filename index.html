@@ -1,0 +1,290 @@
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#edf6fb">
+  <title>İMAN — İslami Yaşam</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+  <section id="sanctuary-entry" class="sanctuary-entry" role="dialog" aria-modal="true" aria-labelledby="sanctuary-title">
+    <div class="entry-shade"></div>
+    <div class="entry-copy">
+      <span class="entry-kicker">KUDÜS • MESCİD-İ AKSA</span>
+      <h1 id="sanctuary-title">Huzur kapısından<br><em>içeri buyur.</em></h1>
+      <p>Maneviyatla çevrili bir yolculuğa adım at.</p>
+      <button class="entry-button" type="button" onclick="enterSanctuary()">Kapıdan içeri gir <span>↗</span></button>
+      <div class="entry-language" role="group" aria-label="Dil seçimi">
+        <button type="button" data-language="tr" aria-pressed="true">Türkçe</button>
+        <button type="button" data-language="en" aria-pressed="false">English</button>
+      </div>
+      <small>Temsili görsel · Wikimedia Commons</small>
+    </div>
+    <span class="entry-arch" aria-hidden="true"></span>
+  </section>
+  <div id="door-transition" class="door-transition" aria-hidden="true" hidden>
+    <div class="transition-ambient"></div>
+    <div class="transition-door-frame">
+      <div class="transition-door-leaf door-leaf-left"><span class="transition-door-panel"></span><span class="transition-door-handle"></span></div>
+      <div class="transition-door-leaf door-leaf-right"><span class="transition-door-panel"></span><span class="transition-door-handle"></span></div>
+    </div>
+    <p id="door-transition-title">Huzur kapısı</p>
+  </div>
+
+  <header class="site-header">
+    <a class="logo" href="#home" onclick="goHome()">
+      <span class="logo-symbol">☾</span>
+      <span>İMAN</span>
+    </a>
+
+    <nav class="main-nav">
+      <a href="#home" onclick="goHome()">Ana Sayfa</a>
+      <a href="#prayers" onclick="event.preventDefault(); openSanctuaryDoor('prayers')">Namaz Vakitleri</a>
+      <a href="#features" onclick="event.preventDefault(); openSanctuaryDoor('features')">Keşfet</a>
+    </nav>
+
+    <div class="language-switch" role="group" aria-label="Dil seçimi">
+      <button id="language-tr" type="button" aria-pressed="true">TR</button>
+      <button id="language-en" type="button" aria-pressed="false">EN</button>
+    </div>
+    <a class="header-button" href="#prayers" onclick="event.preventDefault(); openSanctuaryDoor('prayers')">Günün Vakitleri <span>↗</span></a>
+  </header>
+
+  <main id="home">
+    <nav class="sanctuary-hall" aria-label="Mekânlar arasında gezin">
+      <button type="button" class="sanctuary-door door-home" onclick="openSanctuaryDoor('hero')"><span>01</span><strong>Huzur kapısı</strong><small>Takvim · Saat · Hava</small></button>
+      <button type="button" class="sanctuary-door door-gallery" onclick="openSanctuaryDoor('gallery')"><span>02</span><strong>Dünyaya açılan kapı</strong><small>Mimari duraklar</small></button>
+      <button type="button" class="sanctuary-door door-prayers" onclick="openSanctuaryDoor('prayers')"><span>03</span><strong>Vakit kapısı</strong><small>Namaz vakitleri</small></button>
+      <button type="button" class="sanctuary-door door-devotion" onclick="openSanctuaryDoor('features')"><span>04</span><strong>İbadet kapısı</strong><small>Maneviyat yolculuğu</small></button>
+    </nav>
+
+    <section id="hero" class="hero">
+      <div class="hero-glow"></div>
+      <div class="hero-content">
+        <div class="hero-intro">
+          <div class="eyebrow"><span></span> HUZUR • HATIRLAMA • MANEVİYAT</div>
+          <div class="hero-moon">☾</div>
+          <h1>Kalbine huzur,<br><em>gününe bereket.</em></h1>
+          <p>İbadet yolculuğunda sana eşlik eden dijital bir yaşam alanı.</p>
+          <div class="hero-actions">
+            <a href="#prayers" class="primary-button" onclick="event.preventDefault(); openSanctuaryDoor('prayers')">Namaz Vakitleri <span>→</span></a>
+            <a href="#features" class="text-button" onclick="event.preventDefault(); openSanctuaryDoor('features')">Keşfet <span>↓</span></a>
+          </div>
+          <div class="hero-location-card">
+            <button id="locate-user" class="hero-location" type="button" aria-label="Mevcut konumumu bul ve şehir bilgisini göster">
+              <span aria-hidden="true">⌖</span>
+              <span id="city" aria-live="polite">Konumunu görmek için dokun.</span>
+            </button>
+            <button id="toggle-location-picker" class="location-picker-toggle" type="button" aria-expanded="false" aria-controls="location-picker">Başka bir konum seç</button>
+            <div id="location-picker" class="location-picker" hidden>
+              <label for="country-select">Ülke</label>
+              <select id="country-select">
+                <option value="">Ülkeler yükleniyor…</option>
+              </select>
+              <label for="city-search">Şehir veya ilçe</label>
+              <div class="location-search-row">
+                <input id="city-search" type="search" autocomplete="off" placeholder="Örn. Tokyo" aria-describedby="location-help">
+                <button id="search-location" type="button">Ara</button>
+              </div>
+              <p id="location-help" class="location-help">Ülkeyi seç, şehir adını yaz ve ara.</p>
+              <div id="location-results" class="location-results" role="listbox" aria-label="Konum arama sonuçları"></div>
+              <a class="location-attribution" href="https://open-meteo.com/en/docs/geocoding-api" target="_blank" rel="noopener noreferrer">Şehir araması: Open-Meteo</a>
+            </div>
+          </div>
+        </div>
+        <div id="home-dashboard" class="home-dashboard">
+          <aside class="hero-verse" aria-label="Rad suresi 28. ayet">
+            <span class="quote-mark">“</span>
+            <p>Kalpler ancak Allah'ı anmakla huzur bulur.</p>
+            <span class="quote-reference">RA'D SURESİ • 28. AYET</span>
+          </aside>
+          <div class="dashboard-grid">
+            <article class="dashboard-card calendar-card" aria-label="Takvim">
+              <div class="dashboard-card-heading">
+                <div><span class="dashboard-eyebrow">TAKVİM</span><h3>Takvim</h3></div>
+                <div class="calendar-navigation">
+                  <button id="calendar-prev" type="button" aria-label="Önceki ay">‹</button>
+                  <button id="calendar-next" type="button" aria-label="Sonraki ay">›</button>
+                </div>
+              </div>
+              <p id="calendar-month" class="calendar-month" aria-live="polite"></p>
+              <div class="calendar-weekdays" aria-hidden="true"><span>Pzt</span><span>Sal</span><span>Çar</span><span>Per</span><span>Cum</span><span>Cmt</span><span>Paz</span></div>
+              <div id="calendar-grid" class="calendar-grid" role="group" aria-label="Ayın günleri"></div>
+              <p id="calendar-selected" class="calendar-selected" aria-live="polite"></p>
+            </article>
+    
+            <article class="dashboard-card planner-card" aria-label="Saat ve günlük plan">
+              <div class="dashboard-card-heading">
+                <div><span class="dashboard-eyebrow">SAAT PLANLAMASI</span><h3>Gününü planla</h3></div>
+                <span id="live-clock" class="live-clock" aria-label="Şu anki saat">--:--:--</span>
+              </div>
+              <div class="planner-meta">
+                <p id="today-date" class="dashboard-hijri-date">Bugünün tarihi</p>
+                <label class="time-format-control" for="time-format"><span id="time-format-label">Saat</span>
+                  <select id="time-format" aria-label="Saat gösterimi">
+                    <option value="24">24 sa</option>
+                    <option value="12">12 sa</option>
+                  </select>
+                </label>
+              </div>
+              <p id="planner-date-label" class="planner-date-label"></p>
+              <form id="planner-form" class="planner-form">
+                <label for="plan-time">Saat</label>
+                <input id="plan-time" type="time" required>
+                <label for="plan-title">Planın</label>
+                <div class="planner-entry-row">
+                  <input id="plan-title" type="text" maxlength="80" placeholder="Örn. Kitap okumak" required>
+                  <button type="submit">Ekle</button>
+                </div>
+              </form>
+              <p class="planner-note">Planların bu cihazda saklanır.</p>
+              <ul id="plan-list" class="plan-list"></ul>
+            </article>
+    
+            <article class="dashboard-card weather-card" aria-label="Hava durumu">
+              <div class="dashboard-card-heading">
+                <div><span class="dashboard-eyebrow">BULUNDUĞUN YER</span><h3>Hava durumu</h3></div>
+                <span id="weather-icon" class="weather-icon" aria-hidden="true">☁️</span>
+              </div>
+              <p id="weather-location" class="weather-location">Konum seçilmedi</p>
+              <strong id="weather-temperature" class="weather-temperature">—°</strong>
+              <p id="weather-description" class="weather-description">Hava durumunu görmek için konumunu seç.</p>
+              <div id="weather-details" class="weather-details"></div>
+              <p id="weather-status" class="weather-status" role="status" aria-live="polite"></p>
+              <button id="weather-location-action" class="weather-location-action" type="button">Konum seç / yenile</button>
+              <a class="weather-attribution" href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Hava verisi: Open-Meteo</a>
+            </article>
+          </div>
+        </div>
+      </div>
+      <div class="hero-decoration">بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ</div>
+      <div class="hero-bottom-line"></div>
+    </section>
+
+
+
+    <section id="gallery" class="world-gallery" aria-label="Dünyadan mimari duraklar">
+      <div class="world-gallery-copy">
+        <span class="section-kicker">DÜNYADAN İLHAM</span>
+        <h2 id="gallery-title">Sultan Ahmet Camii</h2>
+        <p id="gallery-location">İstanbul, Türkiye</p>
+        <div class="gallery-controls">
+          <button id="gallery-prev" type="button" aria-label="Önceki fotoğraf">←</button>
+          <span id="gallery-count" aria-live="polite">1 / 20</span>
+          <button id="gallery-next" type="button" aria-label="Sonraki fotoğraf">→</button>
+        </div>
+      </div>
+      <figure class="world-gallery-photo">
+        <img id="gallery-image" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Sultan_Ahmet_Mosque_in_Istanbul.jpg/1280px-Sultan_Ahmet_Mosque_in_Istanbul.jpg" alt="İstanbul'daki Sultan Ahmet Camii" loading="lazy" decoding="async">
+        <figcaption id="gallery-credit">Fotoğraf: El Mehdi Imehda / Wikimedia Commons (CC BY-SA 4.0)</figcaption>
+      </figure>
+    </section>
+
+    <section id="prayers" class="prayer-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">GÜNLÜK İBADET</span>
+          <h2>Namaz vakitleri</h2>
+          <p>Günün her anında Rabbini hatırla.</p>
+        </div>
+      </div>
+
+      <div class="prayer-panel">
+        <div class="prayer-intro">
+          <span class="prayer-icon">☾</span>
+          <div>
+            <span class="small-label">GÜNLÜK PLANIN</span>
+            <h3>Vaktinde, huzurla.</h3>
+            <p>Namaz vakitlerini bulunduğun konuma göre görüntüle.</p>
+          </div>
+        </div>
+        <div id="prayer-times" class="prayer-times">
+          <p class="loading-message">Namaz vakitlerini görmek için konumunu bul.</p>
+        </div>
+        <p id="prayer-status" class="prayer-status" role="status" aria-live="polite">Konum izni yalnızca konum düğmesine dokunduğunda istenir.</p>
+      </div>
+    </section>
+
+    <section id="features" class="features-section">
+      <div class="section-heading">
+        <div>
+          <span class="section-kicker">MANEVİYATINI KEŞFET</span>
+          <h2>İbadet yolculuğun</h2>
+          <p>Her gün kendine ve maneviyatına biraz zaman ayır.</p>
+        </div>
+      </div>
+
+      <div class="feature-grid">
+        <button class="feature-card feature-large" onclick="openSanctuaryDoor('quran')">
+          <span class="feature-number">01 / KUR'AN</span>
+          <span class="feature-icon">۞</span>
+          <strong>Kur'an-ı Kerim</strong>
+          <span class="feature-description">Ayetleri oku, meallerini keşfet.</span>
+          <span class="feature-arrow">↗</span>
+        </button>
+
+        <button class="feature-card" onclick="openSanctuaryDoor('dua')">
+          <span class="feature-number">02 / DUA</span>
+          <span class="feature-icon">🤲</span>
+          <strong>Dualar</strong>
+          <span class="feature-description">Günlük dualar ve anlamları.</span>
+          <span class="feature-arrow">↗</span>
+        </button>
+
+        <button class="feature-card" onclick="openSanctuaryDoor('hadith')">
+          <span class="feature-number">03 / HADİS</span>
+          <span class="feature-icon">📜</span>
+          <strong>Hadisler</strong>
+          <span class="feature-description">Peygamberimizin öğütleri.</span>
+          <span class="feature-arrow">↗</span>
+        </button>
+
+        <button class="feature-card" onclick="openSanctuaryDoor('names')">
+          <span class="feature-number">04 / ESMAÜL HÜSNA</span>
+          <span class="feature-icon arabic-icon">الله</span>
+          <strong>Allah'ın 99 İsmi</strong>
+          <span class="feature-description">İsimleri ve güzel anlamları.</span>
+          <span class="feature-arrow">↗</span>
+        </button>
+
+        <button class="feature-card" onclick="openSanctuaryDoor('tasbeeh')">
+          <span class="feature-number">05 / TESBİHAT</span>
+          <span class="feature-icon">📿</span>
+          <strong>Dijital Tesbih</strong>
+          <span class="feature-description">Zikret, say ve devam et.</span>
+          <span class="feature-arrow">↗</span>
+        </button>
+
+        <button class="feature-card" onclick="openSanctuaryDoor('qibla')">
+          <span class="feature-number">06 / KIBLE</span>
+          <span class="feature-icon">🧭</span>
+          <strong>Kıble Bulucu</strong>
+          <span class="feature-description">Kıble yönünü öğren.</span>
+          <span class="feature-arrow">↗</span>
+        </button>
+      </div>
+    </section>
+
+    <section id="content" class="content-section hidden">
+      <button onclick="goHome()" class="back-button">← Ana sayfaya dön</button>
+      <div id="page-content"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <a class="logo footer-logo" href="#home" onclick="goHome()">☾ İMAN</a>
+    <p>Her gün hatırlamak, her gün güzelleşmek.</p>
+    <span>© 2026 İMAN — İslami Yaşam</span>
+    <p class="founder-signature">Bir fikirden doğdu, huzurla büyüyor · İMAN'ın kurucusu</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
