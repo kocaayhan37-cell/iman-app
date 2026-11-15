@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://kocaayhan37-cell.github.io/iman-app/sitemap.xml
